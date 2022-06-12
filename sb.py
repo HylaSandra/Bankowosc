@@ -1,15 +1,40 @@
+from ctypes import addressof
 import socket
+import threading
 
-HOST = 'localhost'
+HOST = socket.gethostbyname(socket.gethostbyname())
 PORT = 2137
+ADDR = (HOST, PORT)
+SIZE = 1024
+FORMAT = "uft-8"
+DISCONNECT_MSG = "!DISONNECT"   
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+conn, addr = server.accept()
 
-s.bind((HOST, PORT))
+def handle_client(conn, addr):
+    print(f"[New Connection] {addr} connected.")
 
-s.listen(1)
+connected = True
+while connected:
+    msg = conn.recv(SIZE).decode(FORMAT)
+    if msg == DISCONNECT_MSG:
+        connected = False
 
-conn, addr = s.accept()
+    print(f"[{addr}] {msg}")
+    conn.send(msg.encode(FORMAT))
+
+conn.close()
+
+def start():
+    print("[STARTING] Server is starting...")
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.bind(ADDR)
+    server.listen()
+    print(f"ACTIVE CONNECTIONS]")
+
+if __name__ == "__start__":
+    start() 
 
 users = [
     {

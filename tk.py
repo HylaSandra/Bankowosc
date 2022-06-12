@@ -39,7 +39,6 @@ response = s.recv(1024)
 print(response.decode('utf-8'))
 
 option = input('')
-
 s.send(option.encode('utf-8'))
 
 response = s.recv(1024)
@@ -69,3 +68,4 @@ print(response.decode('utf-8'))
 option = input('')
 
 s.send(option.encode('utf-8'))
+ 
